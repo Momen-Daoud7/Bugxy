@@ -60,7 +60,7 @@ exports.createUser = async(req,res,next) => {
 		const hasedPassword = await bcrypt.hash(req.body.password,12);
 		req.body.password = hasedPassword;
 
-		userServices.store(req.body);
+		await userServices.store(req.body);
 		res.redirect('/users')
 	}catch(error) {
 		console.log(error)
@@ -87,7 +87,7 @@ exports.updateUser = async(req,res,next) => {
 // Delete a user
 exports.deleteUser = async(req,res,next) => {
 	try {
-		userServices.delete(req.params.userId);
+		await userServices.delete(req.params.userId);
 		res.redirect('/users')
 	}catch(error) {
 		console.log(error)
