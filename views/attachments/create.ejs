@@ -1,0 +1,57 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+  <div class="col-sm-6">
+      <h1 class="m-0">Create attachment</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Create attachment Page</li>
+    </ol>
+  </div><!-- /.col -->
+
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-12">
+	<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add attachment</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <%if(errors){%>
+                <%errors.forEach(error => {%>
+                <p style="color:red;"><%= error.msg%></p>
+                <%})%>
+              <%}%>
+              <form action="/attachments/create" method="POST">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label>Tickets</label>
+                    <select name="ticketId" class="form-control">
+                      <%tickets.forEach(ticket => {%>
+                        <option value="<%=ticket.id%>"><%=ticket.title%></option>
+                      <%})%>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="file">Attachment</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                  </div>
+                <!-- /.card-body -->
+                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+              </form>
+            </div>
+
+</div>
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>

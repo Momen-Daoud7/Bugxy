@@ -28,7 +28,7 @@ module.exports = class CommentServices {
 			if(!oldComment) {
 				return  false;
 			}
-			const updatedComment = await oldComment.update();
+			const updatedComment = await oldComment.update(data);
 			console.log(updatedComment)
 				return updatedComment;
 			

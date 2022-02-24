@@ -28,7 +28,7 @@ module.exports = class AttachmentServices {
 			if(!oldAttachment) {
 				return  false;
 			}
-			const updatedAttachment = await oldAttachment.update();			
+			const updatedAttachment = await oldAttachment.update(data);			
 			return updatedAttachment;
 			
 		}catch(error) {

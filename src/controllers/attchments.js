@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const ticketServices = require('../services/ticket.services');
 const attachmentServices = require('../services/attachment.services');
 
 // Get all attachments
@@ -30,9 +30,11 @@ exports.getAttachment = async(req,res,next) => {
 // Create Page
 exports.createPage = async(req,res,next) => {
 	try {
+		const tickets = await ticketServices.getTickets()
 		res.render('attachments/create', {
 			pageTitle: 'Create attachment',
-			errors:undefined
+			errors:undefined,
+			tickets,
 		})
 	}catch(error) {
 		console.log(error)

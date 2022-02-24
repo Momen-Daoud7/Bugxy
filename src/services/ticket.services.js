@@ -28,7 +28,7 @@ module.exports = class TicketServices {
 			if(!oldTicket) {
 				return  false;
 			}
-			const updatedTicket = await oldTicket.update();
+			const updatedTicket = await oldTicket.update(data);
 			return updatedTicket;
 			
 		}catch(error) {

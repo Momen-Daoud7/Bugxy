@@ -12,13 +12,6 @@ const  {
 // middlewares
 const { protect } = require('../middleware/auth')
 
-// Validation
-const {
-	attachmentValidationRules,
-	createValidate,
-	editValidate
-} = require('../validation/attachments');
-
 const router = express.Router();
 
 
@@ -28,11 +21,11 @@ router.get('/',getAttachments);
 
 router.get('/add',createPage);
 
-router.post('/create',attachmentValidationRules(),createValidate,createAttachment);
+router.post('/create',createAttachment);
 
 router.get('/edit/:attachmentId',editPage);
 
-router.post('/update/:attachmentId',attachmentValidationRules(),editValidate,updateAttachment);
+router.post('/update/:attachmentId',updateAttachment);
 
 router.post('/delete/:attachmentId',deleteAttachment);
 

@@ -1,3 +1,4 @@
+const ticketServices = require('../services/ticket.services');
 const commentServices = require('../services/comment.services');
 
 // Get all comments
@@ -29,9 +30,11 @@ exports.getComment = async(req,res,next) => {
 // Create Page
 exports.createPage = async(req,res,next) => {
 	try {
+		const tickets = await ticketServices.getTickets()
 		res.render('comments/create', {
 			pageTitle: 'Create comment',
-			errors:undefined
+			errors:undefined,
+			tickets
 		})
 	}catch(error) {
 		console.log(error)
@@ -42,10 +45,12 @@ exports.createPage = async(req,res,next) => {
 exports.editPage = async(req,res,next) => {
 	try {
 		const comment = await commentServices.getComment(req.params.commentId);
+		const tickets = await ticketServices.getTickets()
 		res.render('comments/edit', {
 			pageTitle: 'Edit comment',
 			errors:undefined,
-			comment
+			comment,
+			tickets
 		})
 	}catch(error) {
 		console.log(error)

@@ -28,7 +28,7 @@ module.exports = class ProjectServices {
 			if(!oldProject) {
 				return  false;
 			}
-			const updatedProject = await oldProject.update();
+			const updatedProject = await oldProject.update(data);
 			return updatedProject;
 		}catch(error) {
 			console.log(error);

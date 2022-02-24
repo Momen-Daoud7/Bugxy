@@ -12,8 +12,12 @@ const User = require('./models/1-user');
 dotenv.config({ path: './config/config.env'});
 
 // Mout routes
-const users = require('./routes/users');
 const auth = require('./routes/auth');
+const users = require('./routes/users');
+const projects = require('./routes/projects');
+const tickets = require('./routes/tickets');
+const attachment = require('./routes/attachments');
+const comments = require('./routes/comments');
 
 const app = express();
 
@@ -58,6 +62,10 @@ app.use((req,res,next) => {
 // Load routes
 app.use(auth);
 app.use('/users',users);
+app.use('/projects',projects);
+app.use('/tickets',tickets);
+app.use('/attachments',attachments);
+app.use('/comments',comments);
 app.use('/',async (req,res,next) => {
   res.render('index')
 });
