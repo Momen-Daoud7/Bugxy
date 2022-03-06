@@ -1,3 +1,5 @@
+const userServices = require('../services/user.services');
+const projectServices = require('../services/project.services');
 const ticketServices = require('../services/ticket.services');
 
 // Get all tickets
@@ -13,11 +15,24 @@ exports.getTickets = async(req,res,next) => {
 	}
 }
 
+// Get developer tickets
+exports.getDeveloperTickets = async(req,res,next) => {
+	try {
+		const tickets = await ticketServices.getDeveloperTickets(req.session.user.id);
+		res.render('tickets/index', {
+			pageTitle: 'tickets',
+			tickets
+		})
+	}catch(error) {
+		console.log(error)
+	}
+}
+
 // Get single ticket
 exports.getTicket = async(req,res,next) => {
 	try {
 		const ticket = await ticketServices.getTicket(req.params.ticketId);
-		res.render('tickets/index', {
+		res.render('tickets/details', {
 			pageTitle: 'ticket',
 			ticket
 		})
@@ -29,9 +44,14 @@ exports.getTicket = async(req,res,next) => {
 // Create Page
 exports.createPage = async(req,res,next) => {
 	try {
+		const developers = await userServices.getUserByRole('developer');
+		const projects = await projectServices.getProjects();
+
 		res.render('tickets/create', {
 			pageTitle: 'Create ticket',
-			errors:undefined
+			errors:undefined,
+			developers,
+			projects
 		})
 	}catch(error) {
 		console.log(error)
@@ -42,10 +62,14 @@ exports.createPage = async(req,res,next) => {
 exports.editPage = async(req,res,next) => {
 	try {
 		const ticket = await ticketServices.getTicket(req.params.ticketId);
+		const developers = await userServices.getUserByRole('developer');
+		const projects = await projectServices.getProjects();
 		res.render('tickets/edit', {
 			pageTitle: 'Edit ticket',
 			errors:undefined,
-			ticket
+			ticket,
+			developers,
+			projects
 		})
 	}catch(error) {
 		console.log(error)
@@ -55,8 +79,8 @@ exports.editPage = async(req,res,next) => {
 // Add a new ticket
 exports.createTicket = async(req,res,next) => {
 	try {
-
-		ticketServices.store(req.body);
+		req.body.submitter = req.session.user.name
+		await ticketServices.store(req.body);
 		res.redirect('/tickets')
 	}catch(error) {
 		console.log(error)
@@ -66,8 +90,9 @@ exports.createTicket = async(req,res,next) => {
 // update ticket
 exports.updateTicket = async(req,res,next) => {
 	try {
+		console.log(req.body)
 		const ticket = await ticketServices.update(req.params.ticketId,req.body);
-		res.redirect('/tickets')
+		res.redirect(`/tickets/${req.params.ticketId}`)
 	}catch(error) {
 		console.log(error)
 	}

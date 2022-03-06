@@ -2,7 +2,7 @@ const {body , validationResult} = require('express-validator');
 
 
 // create validation rules
-exports.createValidationRules = () => {
+exports.commentValidationRules = () => {
 	return [
 		body('message',"please add a valid comment").isLength({min:3}).isString(),
 	];

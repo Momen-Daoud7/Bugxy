@@ -1,10 +1,11 @@
-const Comment = require('../models/5-comment');
+const Comment = require('../models/4-comment');
 
 module.exports = class CommentServices {
 	// get all Comments
 	static async getComments() {
 		try{
-			const comments = await Comment.findAll();
+			const comments = await Comment.findAll({include:{all:true}});
+			console.log(comments)
 			return comments;
 		}catch(error) {
 			console.log(error);

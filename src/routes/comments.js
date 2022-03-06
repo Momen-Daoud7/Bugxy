@@ -10,7 +10,7 @@ const  {
 } = require('../controllers/comments');
 
 // middlewares
-const { protect } = require('../middleware/auth')
+const { protect,authorize } = require('../middleware/auth')
 
 // Validation
 const {
@@ -24,19 +24,20 @@ const router = express.Router();
 
 router.use(protect)
 
-router.get('/',getComments);
+router.get('/',authorize('admin','manager'),getComments);
 
-router.get('/add',createPage);
+router.get('/add',authorize('admin','manager'),createPage);
 
-router.post('/create',commentValidationRules(),createValidate,createComment);
+router.post('/create',authorize('admin','manager'),commentValidationRules(),createValidate,createComment);
 
-router.get('/edit/:commentId',editPage);
+router.get('/edit/:commentId',authorize('admin','manager'),editPage);
 
-router.post('/update/:commentId',commentValidationRules(),editValidate,updateComment);
+router.post('/update/:commentId',authorize('admin','manager'),commentValidationRules(),editValidate,updateComment);
 
-router.post('/delete/:commentId',deleteComment);
+router.post('/delete/:commentId',authorize('admin','manager'),deleteComment);
 
-router.get('/:commentId',getComment);
+router.get('/:commentId',authorize('admin','manager'),getComment);
+
 
 
 module.exports = router;

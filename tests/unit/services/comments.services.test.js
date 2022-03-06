@@ -2,7 +2,7 @@ const commentServices = require('../../../src/services/comment.services')
 const User = require('../../../src/models/1-user');
 const Project = require('../../../src/models/2-project');
 const Ticket = require('../../../src/models/3-ticket');
-const Comment = require('../../../src/models/5-comment');
+const Comment = require('../../../src/models/4-comment');
 const database = require('../../../src/config/database')
 
 // Connect to database

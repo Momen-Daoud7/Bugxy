@@ -10,7 +10,7 @@ const  {
 } = require('../controllers/users');
 
 // middlewares
-const { protect } = require('../middleware/auth')
+const { protect,authorize } = require('../middleware/auth')
 
 // Validation
 const {
@@ -25,20 +25,19 @@ const router = express.Router();
 
 router.use(protect)
 
-router.get('/',getUsers);
+router.get('/',authorize('admin'),getUsers);
 
-router.get('/add',createPage);
+router.get('/add',authorize('admin'),createPage);
 
-router.post('/create',createValidationRules(),createValidate,createUser);
+router.post('/create',authorize('admin'),createValidationRules(),createValidate,createUser);
 
-router.get('/edit/:userId',editPage);
+router.get('/edit/:userId',authorize('admin'),editPage);
 
-router.post('/update/:userId',editValidationRules(),editValidate,updateUser);
+router.post('/update/:userId',authorize('admin'),editValidationRules(),editValidate,updateUser);
 
-router.post('/delete/:userId',deleteUser);
+router.post('/delete/:userId',authorize('admin'),deleteUser);
 
-
-router.get('/:userId',getUser);
+router.get('/:userId',authorize('admin'),getUser);
 
 
 module.exports = router;

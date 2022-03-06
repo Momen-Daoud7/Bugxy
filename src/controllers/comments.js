@@ -58,7 +58,7 @@ exports.editPage = async(req,res,next) => {
 }
 
 // Add a new comment
-exports.createcomment = async(req,res,next) => {
+exports.createComment = async(req,res,next) => {
 	try {
 		await commentServices.store(req.body);
 		res.redirect('/comments')
@@ -68,7 +68,7 @@ exports.createcomment = async(req,res,next) => {
 }
 
 // update comment
-exports.updatecomment = async(req,res,next) => {
+exports.updateComment = async(req,res,next) => {
 	try {
 		const comment = await commentServices.update(req.params.commentId,req.body);
 		res.redirect('/comments')
@@ -78,7 +78,7 @@ exports.updatecomment = async(req,res,next) => {
 }
 
 // Delete a comment
-exports.deletecomment = async(req,res,next) => {
+exports.deleteComment = async(req,res,next) => {
 	try {
 		await commentServices.delete(req.params.commentId);
 		res.redirect('/comments')

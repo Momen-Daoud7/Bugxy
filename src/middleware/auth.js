@@ -4,5 +4,13 @@ exports.protect = async (req,res,next) => {
 	}else {
 		next()
 	}
+}
 
+exports.authorize = (...roles) => {
+	return (req,res,next) => {
+		if(!roles.includes(req.session.user.role)) {
+			return res.redirect('/error/500')
+		}
+		next()
+	}
 }

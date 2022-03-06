@@ -35,11 +35,12 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
+          <%if(Auth.role == 'admin') {%>
           <li class="nav-item <%= pageTitle === 'Users' || pageTitle === 'Create user' ? 'menu-open' : '' %>">
             <a href="#" class="nav-link <%= pageTitle === 'Users' || pageTitle === 'Create user' ? 'active' : '' %>">
               <i class="nav-icon fas fa-users"></i>
               <p>
-                User managment
+                User
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -58,28 +59,98 @@
               </li>
             </ul>
           </li>
+          <%}%>
+          <%if(Auth.role == 'admin' || Auth.role == 'manager'){%>
           <li class="nav-item ">
-            <a href="#" class="nav-link <%= pageTitle === 'Users' ? 'active' : '' %>">
+            <a href="#" class="nav-link <%= pageTitle === 'projects' ? 'active' : '' %>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Course managment
+                Projects
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link active">
+                <a href="/projects" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>users</p>
+                  <p>Projects</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="/projects/add" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Add new user</p>
+                  <p>Add new project</p>
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item ">
+            <a href="#" class="nav-link <%= pageTitle === 'tickets' ? 'active' : '' %>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Tickets
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/tickets" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Ticket</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/tickets/add" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add new ticket</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item ">
+            <a href="#" class="nav-link <%= pageTitle === 'comments' ? 'active' : '' %>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Comments
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/comments" class="nav-link active">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Comments</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/comments/add" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add new comment</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+            <%}%>
+            <%if(Auth.role == 'developer'){%>
+              <li class="nav-item ">
+                <a href="#" class="nav-link <%= pageTitle === 'tickets' ? 'active' : '' %>">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Tickets
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="/tickets/developer" class="nav-link active">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Tickets</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <%}%>
           </li>
         </ul>
       </nav>

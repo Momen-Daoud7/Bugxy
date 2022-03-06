@@ -31,15 +31,17 @@ const Ticket = database.define('tickets', {
 	piorty: {
 		type:Sequelize.ENUM('high','medium','low'),
 		allowNull:false	
+	},
+	submitter: {
+		type:Sequelize.STRING,
+		allowNull:false
 	}
 
 });
 
 Project.hasMany(Ticket);
 User.hasMany(Ticket,{foreignKey:'developer'})
-User.hasMany(Ticket,{foreignKey:'submitter'})
 Ticket.belongsTo(User,{foreignKey:'developer'})
-Ticket.belongsTo(User,{foreignKey:'submitter'})
 Ticket.belongsTo(Project)
 
 

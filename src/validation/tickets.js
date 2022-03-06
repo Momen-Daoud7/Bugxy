@@ -2,13 +2,13 @@ const {body , validationResult} = require('express-validator');
 
 
 // create validation rules
-exports.createValidationRules = () => {
+exports.ticketValidationRules = () => {
 	return [
 		body('title',"please add a valid name").isLength({min:3}).isString(),
 		body('description',"please add a valid description").isLength({min:3}).isString(),
 		body('status','please add a valid status').isIn(['open','in progress','close']),
 		body('piorty','please add a valid piorty').isIn(['high','medium','low']),
-		body('type','please add a valid type').isIn(['bugs','feature request','document request']),
+		body('type','please add a valid type').isIn(['bug','feature request','document request']),
 	];
 };
 

@@ -75,7 +75,7 @@ exports.updateProject = async(req,res,next) => {
 }
 
 // Delete a project
-exports.deleteproject = async(req,res,next) => {
+exports.deleteProject = async(req,res,next) => {
 	try {
 		await projectServices.delete(req.params.projectId);
 		res.redirect('/projects')

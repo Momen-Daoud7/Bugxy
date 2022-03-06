@@ -10,7 +10,7 @@ const  {
 } = require('../controllers/projects');
 
 // middlewares
-const { protect } = require('../middleware/auth')
+const { protect,authorize } = require('../middleware/auth')
 
 // Validation
 const {
@@ -22,21 +22,21 @@ const {
 const router = express.Router();
 
 
-router.use(protect)
+// router.use(protect)
 
 router.get('/',getProjects);
 
-router.get('/add',createPage);
+router.get('/add',authorize('admin','manager'),createPage);
 
-router.post('/create',projectValidationRules(),createValidate,createProject);
+router.post('/create',authorize('admin','manager'),projectValidationRules(),createValidate,createProject);
 
-router.get('/edit/:projectId',editPage);
+router.get('/edit/:projectId',authorize('admin','manager'),editPage);
 
-router.post('/update/:projectId',projectValidationRules(),editValidate,updateProject);
+router.post('/update/:projectId',authorize('admin','manager'),projectValidationRules(),editValidate,updateProject);
 
-router.post('/delete/:projectId',deleteProject);
+router.post('/delete/:projectId',authorize('admin','manager'),deleteProject);
 
-router.get('/:projectId',getProject);
+router.get('/:projectId',authorize('admin','manager'),getProject);
 
 
 module.exports = router;

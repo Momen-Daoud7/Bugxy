@@ -16,15 +16,15 @@ const auth = require('./routes/auth');
 const users = require('./routes/users');
 const projects = require('./routes/projects');
 const tickets = require('./routes/tickets');
-const attachment = require('./routes/attachments');
 const comments = require('./routes/comments');
+const errors = require('./routes/errors');
 
 const app = express();
 
 // Set static folder
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // session mangament
 let mysession = new mysqlStore({db: database});
@@ -64,8 +64,8 @@ app.use(auth);
 app.use('/users',users);
 app.use('/projects',projects);
 app.use('/tickets',tickets);
-app.use('/attachments',attachments);
 app.use('/comments',comments);
+app.use(errors);
 app.use('/',async (req,res,next) => {
   res.render('index')
 });

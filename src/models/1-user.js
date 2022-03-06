@@ -23,7 +23,7 @@ const User = database.define('users', {
 	    }
   	},
     role: {
-	    type: Sequelize.ENUM('manager','employee','client','captin'),
+	    type: Sequelize.ENUM('manager','developer','admin'),
 	    allowNull:false
   	},
     password: {

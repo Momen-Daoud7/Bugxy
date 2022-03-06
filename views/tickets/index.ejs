@@ -19,32 +19,52 @@
 <div class="col-12">
 	<div class="card">
 	<%if(tickets) {%>
-		<div class="card-header"></div>
+		<div class="card-header">
+			<%if(!Auth.role == 'developer') {%>		
+				<a href="/tickets/add" class="btn btn-success font-weight-bold">Add</a>
+			<%}%>
+		</div>
 		<div class="card-body">
 			<table class="table table-bordered">
 			    <thead>
 			       <tr>
 			            <th>Name</th>
 			            <th>Description</th>
-			            <th>Edit</th>
-			            <th>Delete</th>
+			            <th>Project</th>
+			            <th>Status</th>
+			            <th>Piorty</th>
+			            <th>Details</th>
+			            <%if(!Auth.role == 'developer') {%>
+				            <th>Edit</th>
+				            <th>Delete</th>
+				        <%}%>
 			        </tr>
 			   </thead>
 			   <tbody>
 			   	<% tickets.forEach(ticket => {%>
 			       <tr data-widget="expandable-table" aria-expanded="false">
-			            <td><%= ticket.name%></td>
+			            <td><%= ticket.title%></td>
 			            <td><%= ticket.description%></td>
+			            <td><%= ticket.project.name%></td>
+			            <td><%= ticket.status%></td>
+			            <td><%= ticket.piorty%></td>
 			            <td>
-			            	<a href="/tickets/edit/<%=ticket.id%>" class="btn btn-primary btn-sm">Edit</a>
+			            	<a href="/tickets/<%=ticket.id%>" class="btn btn-success">
+			            		Details
+			            	</a>
 			            </td>
-			            <td>
-			            	<form action="/tickets/delete/<%=ticket.id%>" method='POST'>
-								<input type="hidden" name="_csrf" value="<%= _csrf %>">
-			            		<button type="submit" class="btn btn-sm btn-danger">
-			            			Delete</button>
-			            	</form>
-			            </td>
+			            <%if(!Auth.role == 'developer') {%>
+				            <td>
+				            	<a href="/tickets/edit/<%=ticket.id%>" class="btn btn-primary btn-sm">Edit</a>
+				            </td>
+				            <td>
+				            	<form action="/tickets/delete/<%=ticket.id%>" method='POST'>
+									<input type="hidden" name="_csrf" value="<%= _csrf %>">
+				            		<button type="submit" class="btn btn-sm btn-danger">
+				            			Delete</button>
+				            	</form>
+				            </td>
+				        <%}%>
 					</tr>
 			     <%})%>
 			   </tbody>

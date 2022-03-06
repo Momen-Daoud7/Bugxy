@@ -11,6 +11,16 @@ module.exports = class userServices {
 		}
 	}
 
+	// get users by thier role
+	static async getUserByRole(role) {
+		try{
+			const users = await User.findAll({where:{role}})
+			return users
+		}catch(error) {
+			console.log(error)
+		}
+	}
+
 	//store a user
 	static async store(data) {
 		try{

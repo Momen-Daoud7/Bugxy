@@ -2,7 +2,7 @@ const {body , validationResult} = require('express-validator');
 
 
 // create validation rules
-exports.createValidationRules = () => {
+exports.projectValidationRules = () => {
 	return [
 		body('name',"please add a valid name").isLength({min:3}).isString(),
 		body('description',"please add a valid description").isLength({min:3}).isString(),

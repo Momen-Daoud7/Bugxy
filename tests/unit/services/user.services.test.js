@@ -23,7 +23,7 @@ beforeEach(async () => {
 			id:2,
 			name:"Ahmed Daoud Momen Daoud",
 			email:"ahmed@mail.com",
-			role:'captin',
+			role:'developer',
 			password:"1223393"
 		}
 

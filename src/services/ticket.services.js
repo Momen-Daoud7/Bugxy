@@ -4,7 +4,17 @@ module.exports = class TicketServices {
 	// get all Tickets
 	static async getTickets() {
 		try{
-			const tickets = await Ticket.findAll();
+			const tickets = await Ticket.findAll({include:{all:true}});
+			return tickets;
+		}catch(error) {
+			console.log(error);
+		}
+	}
+
+	// get all developer's Tickets
+	static async getDeveloperTickets(developer) {
+		try{
+			const tickets = await Ticket.findAll({where:{developer},include:{all:true}});
 			return tickets;
 		}catch(error) {
 			console.log(error);
@@ -53,7 +63,8 @@ module.exports = class TicketServices {
 	// get a single Ticket
 	static async getTicket(TicketId) {
 		try{
-			const ticket = await Ticket.findByPk(TicketId);
+			const ticket = await Ticket.findByPk(TicketId,{include:{all:true}});
+			console.log(ticket)
 			if(!ticket) {
 				console.log('no Ticket with that id');
 				return false;

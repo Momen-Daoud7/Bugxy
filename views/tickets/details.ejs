@@ -1,0 +1,110 @@
+<%- include('../includes/header')%>
+<%- include('../includes/navbar')%>
+<%- include('../includes/sidebar')%>
+<%- include('../includes/start_content_header')%>
+  <div class="col-sm-6">
+      <h1 class="m-0">Create ticket</h1>
+  </div><!-- /.col -->
+  <div class="col-sm-6">
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item active">Edit ticket Page</li>
+    </ol>
+  </div><!-- /.col -->
+
+<%- include('../includes/end_content_header')%>
+
+<%- include('../includes/start_content')%>
+
+
+<div class="col-6">
+	<div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Ticket details</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="/tickets/update/<%=ticket.id%>" method="POST">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="title">title</label>
+                    <input type="text" class="form-control" id="title" name="title" value="<%=ticket.title%>" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea name="description" class="form-control" readonly><%=ticket.description%></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Assign developer</label>
+                    <input type="text" value="<%=ticket.user.name%>" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>Submitter</label>
+                    <input type="text" value="<%=ticket.submitter%>" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>Status</label>
+                    <%if(Auth.role == 'developer') {%>
+                      <select class="form-control" name="status">
+                        <option value="open">Open</option>
+                        <option value="in progress">In progress</option>
+                        <option value="close">Close</option>
+                      </select>
+                    <%}else {%>
+                      <input type="text" name="status" value="<%=ticket.status%>" class="form-control" readonly>
+                    <%}%>
+                  </div>
+                  <div class="form-group">
+                    <label>Type</label>
+                    <input type="text" name="type" value="<%=ticket.type%>" class="form-control" readonly>
+                  </div>
+                  <div class="form-group">
+                    <label>piorty</label>
+                    <input type="text" name="piorty" value="<%=ticket.piorty%>" class="form-control" readonly>
+                  </div>
+                <!-- /.card-body -->
+                <input type="hidden" name="_csrf" value="<%= _csrf %>">
+                <div class="card-footer">
+                  <%if(Auth.role =='developer'){%>
+                    <button type="submit">Edit</button>
+                  <%}else{%>
+                    <a href="/tickets/edit/<%=ticket.id%>" class="btn btn-success">Edit</a>
+                  <%}%>
+                </div>
+              </form>
+            </div>
+          </form>
+        </div>
+      </div>
+
+<div class="col-6">
+  <div class="card">
+    <div class="card-header">
+      <form action="/comments/create" method="post">
+        <input type="text" name="message" class="form-control">
+        <input type="hidden" name="_csrf" value="<%= _csrf %>">
+        <input type="hidden" name="ticketId" value="<%=ticket.id%>">
+        <button type="submit" class="btn btn-success mt-2">Add</button>
+      </form>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered">
+          <thead>
+             <tr>
+                  <th>Comments</th>
+              </tr>
+         </thead>
+         <tbody>
+          <% ticket.comments.forEach(comment => {%>
+             <tr data-widget="expandable-table" aria-expanded="false">
+                  <td><%= comment.message%></td>
+          </tr>
+           <%})%>
+         </tbody>
+      </table>
+    </div>
+  </div></div>
+
+<%- include('../includes/end_content')%>
+
+<%- include('../includes/footer')%>
