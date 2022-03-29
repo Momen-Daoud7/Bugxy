@@ -1,23 +1,21 @@
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const database = require('../config/database');
-
-const Project = database.define('projects', {
-	id: {
-		type: Sequelize.INTEGER,
-		autoIncrement: true,
-		allowNull: false,
-		primaryKey: true,
-	},
+const ProjectSchema = new Schema({
 	name: {
-		type: Sequelize.STRING,
-		allowNull: false,
+		type: String,
+		require:[true,"Name is required."]
 	},
 	description: {
-		type:Sequelize.TEXT,
-		allowNull:false
-	}
-});
+		type:String,
+		required:[true,"Description is required."]
+	},
+	tickets:[{
+		type:  Schema.Types.ObjectId,
+		ref:'tickets'
+	}]
+})
 
+const Project = mongoose.model('project',ProjectSchema);
 
-module.exports = Project; 
+module.exports = Project;

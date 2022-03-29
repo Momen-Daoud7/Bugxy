@@ -1,41 +1,37 @@
-const Sequelize = require('sequelize');
-const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const database = require('../config/database');
-
-const User = database.define('users', {
-	id: {
-		type: Sequelize.INTEGER,
-		autoIncrement: true,
-		allowNull: false,
-		primaryKey: true,
-	},
+const UserSchema = new Schema({
 	name: {
-		type: Sequelize.STRING,
-		allowNull: false,
+		type:String,
+		required:[true,"Name is required."]
 	},
 	email: {
-	    type: Sequelize.STRING,
-	    allowNull:false,
-	    unique: true,
-	    validate: {
-	    	isEmail:true
-	    }
-  	},
-    role: {
-	    type: Sequelize.ENUM('manager','developer','admin'),
-	    allowNull:false
-  	},
-    password: {
-	    type: Sequelize.STRING,
-	    allowNull:false,
-  	},
+		type: String,
+		required:[true,"Email is required."],
+		unique:true,
+		match:[
+			/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+      		'Please add a valid email'
+		]
+	},
+	role: {
+		type:String,
+		enum:['manager','developer','admin'],
+		required:[true,"Role is required."]
+	},
+	password: {
+		type:String,
+		required:[true,"Password is required."]
+	}
 
-});
+})
 
 // Match passwords
-User.prototype.matchPassword = async function(enteredPassword) {
+UserSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword,this.password);
-  }
+ }
 
-module.exports = User; 
+const User = mongoose.model('user',UserSchema);
+
+module.exports = User;

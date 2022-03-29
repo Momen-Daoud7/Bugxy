@@ -4,7 +4,7 @@ module.exports = class CommentServices {
 	// get all Comments
 	static async getComments() {
 		try{
-			const comments = await Comment.findAll({include:{all:true}});
+			const comments = await Comment.find({}).populate('user');
 			console.log(comments)
 			return comments;
 		}catch(error) {
@@ -25,13 +25,16 @@ module.exports = class CommentServices {
 	// update a Comment
 	static async update(CommentId,data) {
 		try{
-			const oldComment = await Comment.findByPk(CommentId)
+			const oldComment = await Comment.findById(CommentId)
 			if(!oldComment) {
 				return  false;
 			}
-			const updatedComment = await oldComment.update(data);
-			console.log(updatedComment)
-				return updatedComment;
+			const updatedComment = await Comment.findByIdAndUpdate(CommentId,data,{
+				new:true,
+				runValidators:true
+			});
+
+			return updatedComment;
 			
 		}catch(error) {
 			console.log(error);
@@ -41,11 +44,11 @@ module.exports = class CommentServices {
 	// delete a Comment
 	static async delete(CommentId) {
 		try{
-			const comment = await Comment.findByPk(CommentId);
+			const comment = await Comment.findById(CommentId);
 			if(!comment) {
 				return false;
 			}
-			const deleted = await comment.destroy();
+			const deleted = await comment.remove();
 			return true;
 		}catch(error){
 			console.log(error);
@@ -55,7 +58,7 @@ module.exports = class CommentServices {
 	// get a single Comment
 	static async getComment(CommentId) {
 		try{
-			const comment = await Comment.findByPk(CommentId);
+			const comment = await Comment.findById(CommentId);
 			if(!comment) {
 				console.log('no Comment with that id');
 				return false;

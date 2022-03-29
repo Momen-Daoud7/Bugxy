@@ -1,48 +1,50 @@
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const database = require('../config/database');
-
-const User = require('./1-user');
-const Project = require('./2-project');
-
-const Ticket = database.define('tickets', {
-	id: {
-		type: Sequelize.INTEGER,
-		autoIncrement: true,
-		allowNull: false,
-		primaryKey: true,
-	},
+const TicketSchema = new Schema({
 	title: {
-		type: Sequelize.STRING,
-		allowNull: false,
+		type: String,
+		required:[true,"Name is required."]
 	},
 	description: {
-		type:Sequelize.TEXT,
-		allowNull:false
+		type: String,
+		required:[true,"Description is required."]
 	},
 	status: {
-		type:Sequelize.ENUM('close','open','in progress'),
-		allowNull:false
+		type:String,
+		enum:['close','open','in progress'],
+		required:[true,"Status is required"]
 	},
 	type: {
-		type:Sequelize.ENUM('bugs','feature request','document request'),
-		allowNull:false
+		type:String,
+		enum:['bugs','feature request','document request'],
+		required:[true,"Status is required"]
 	},
 	piorty: {
-		type:Sequelize.ENUM('high','medium','low'),
-		allowNull:false	
+		type:String,
+		enum:['high','medium','low'],
 	},
 	submitter: {
-		type:Sequelize.STRING,
-		allowNull:false
-	}
-
+		type:String,
+		required:[true,"Submitter is required"]
+	},
+	project: {
+		type: Schema.Types.ObjectId,
+		ref:'project',
+		required:[true,"Project is required"]
+	},
+	developer: {
+		type:  Schema.Types.ObjectId,
+		ref:'user',
+		required:[true,"Developer is required"]
+	},
+	comments:[{
+		type:  Schema.Types.ObjectId,
+		ref:'comments'
+	}]
 });
 
-Project.hasMany(Ticket);
-User.hasMany(Ticket,{foreignKey:'developer'})
-Ticket.belongsTo(User,{foreignKey:'developer'})
-Ticket.belongsTo(Project)
 
+const Ticket = mongoose.model('ticket',TicketSchema);
 
-module.exports = Ticket; 
+module.exports = Ticket;

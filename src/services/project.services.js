@@ -4,7 +4,7 @@ module.exports = class ProjectServices {
 	// get all Projects
 	static async getProjects() {
 		try{
-			const projects = await Project.findAll();
+			const projects = await Project.find({});
 			return projects;
 		}catch(error) {
 			console.log(error);
@@ -24,11 +24,14 @@ module.exports = class ProjectServices {
 	// update a Project
 	static async update(ProjectId,data) {
 		try{
-			const oldProject = await Project.findByPk(ProjectId)
+			const oldProject = await Project.findById(ProjectId)
 			if(!oldProject) {
 				return  false;
 			}
-			const updatedProject = await oldProject.update(data);
+			const updatedProject = await Project.findByIdAndUpdate(ProjectId,data,{
+				new:true,
+				runValidators:true
+			});
 			return updatedProject;
 		}catch(error) {
 			console.log(error);
@@ -38,11 +41,11 @@ module.exports = class ProjectServices {
 	// delete a Project
 	static async delete(ProjectId) {
 		try{
-			const project = await Project.findByPk(ProjectId);
+			const project = await Project.findById(ProjectId);
 			if(!project) {
 				return false;
 			}
-			const deleted = await project.destroy();
+			const deleted = await project.remove();
 			return true;
 		}catch(error){
 			console.log(error);
@@ -52,7 +55,7 @@ module.exports = class ProjectServices {
 	// get a single Project
 	static async getProject(ProjectId) {
 		try{
-			const project = await Project.findByPk(ProjectId);
+			const project = await Project.findById(ProjectId);
 			if(!project) {
 				console.log('no Project with that id');
 				return false;

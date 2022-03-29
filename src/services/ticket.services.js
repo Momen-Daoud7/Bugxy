@@ -4,7 +4,7 @@ module.exports = class TicketServices {
 	// get all Tickets
 	static async getTickets() {
 		try{
-			const tickets = await Ticket.findAll({include:{all:true}});
+			const tickets = await Ticket.find({});
 			return tickets;
 		}catch(error) {
 			console.log(error);
@@ -14,7 +14,7 @@ module.exports = class TicketServices {
 	// get all developer's Tickets
 	static async getDeveloperTickets(developer) {
 		try{
-			const tickets = await Ticket.findAll({where:{developer},include:{all:true}});
+			const tickets = await Ticket.find({developer});
 			return tickets;
 		}catch(error) {
 			console.log(error);
@@ -34,11 +34,14 @@ module.exports = class TicketServices {
 	// update a Ticket
 	static async update(TicketId,data) {
 		try{
-			const oldTicket = await Ticket.findByPk(TicketId)
+			const oldTicket = await Ticket.findById(TicketId)
 			if(!oldTicket) {
 				return  false;
 			}
-			const updatedTicket = await oldTicket.update(data);
+			const updatedTicket = await Ticket.findByIdAndUpdate(TicketId,data,{
+				new:true,
+				runValidators:true
+			});
 			return updatedTicket;
 			
 		}catch(error) {
@@ -49,11 +52,11 @@ module.exports = class TicketServices {
 	// delete a Ticket
 	static async delete(TicketId) {
 		try{
-			const ticket = await Ticket.findByPk(TicketId);
+			const ticket = await Ticket.findById(TicketId);
 			if(!ticket) {
 				return false;
 			}
-			const deleted = await ticket.destroy();
+			const deleted = await ticket.remove();
 			return true;
 		}catch(error){
 			console.log(error);
@@ -63,8 +66,7 @@ module.exports = class TicketServices {
 	// get a single Ticket
 	static async getTicket(TicketId) {
 		try{
-			const ticket = await Ticket.findByPk(TicketId,{include:{all:true}});
-			console.log(ticket)
+			const ticket = await Ticket.findById(TicketId).populate('developer');
 			if(!ticket) {
 				console.log('no Ticket with that id');
 				return false;

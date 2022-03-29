@@ -2,67 +2,66 @@ const ticketServices = require('../../../src/services/ticket.services')
 const User = require('../../../src/models/1-user');
 const Project = require('../../../src/models/2-project');
 const Ticket = require('../../../src/models/3-ticket');
-const database = require('../../../src/config/database')
+const connect = require('../../../src/config/database')
 
 // Connect to database
 beforeAll(async () => {
-	await database.sync()
+	await connect()
 })
 
 
+let user1,user2,project1,ticket1;
 beforeEach(async () => {
-	await User.destroy({where:{}})
-	await Project.destroy({where:{}})
-	await Ticket.destroy({where:{}})
+	await User.deleteMany({})
+	await Project.deleteMany({})
+	await Ticket.deleteMany({})
 
-	await User.bulkCreate([
-		{
-			id:1,
-			name:"Momen Daoud Momen Daoud",
-			email:"momen@mail.com",
-			role:'manager',
-			password:"1223393"
-		},
-		{
-			id:2,
-			name:"Ahmed Daoud Momen Daoud",
-			email:"ahmed@mail.com",
-			role:'captin',
-			password:"1223393"
-		}
+	user1 = new User({
+		name:"Momen Daoud Momen Daoud",
+		email:"momen@mail.com",
+		role:'manager',
+		password:"1223393"
+	})
+	user2 = new User({
+		name:"Ahmed Daoud Momen Daoud",
+		email:"ahmed@mail.com",
+		role:'developer',
+		password:"1223393"
+	})
 
-	])
+	project1 = new Project({
+		name: "E Commenerce",
+		description: "E Commenerce website using php and node"
+	})
 
-	await Project.bulkCreate([
-		{
-			id:1,
-			name: "E Commenerce",
-			description: "E Commenerce website using php and node"
-		},
-	])
+	ticket1 = new Ticket({
+		title: "Add filtering",
+		description: "filter searching results",
+		status: 'open',
+		type:'feature request',
+		piorty: 'high',
+		developer:user1._id,
+		project:project1._id,
+		submitter:"Ahmed"
+	})
+	ticket2 =  new Ticket({
+		title: "Improve the api",
+		description: "refactor the api",
+		status: 'in progress',
+		type:'feature request',
+		piorty: 'low',
+		developer:user1._id,
+		project:project1._id,
+		submitter:"Momen",
+		project:project1._id
+	})
 
-	await Ticket.bulkCreate([
-		{
-			id:1,
-			title: "Add filtering",
-			description: "filter searching results",
-			status: 'open',
-			type:'feature request',
-			piorty: 'high',
-			developer:1,
-			submitter:2
-		},
-		{
-			id:2,
-			title: "Improve the api",
-			description: "refactor the api",
-			status: 'in progress',
-			type:'feature request',
-			piorty: 'low',
-			developer:1,
-			submitter:2
-		},
-	])
+	await user1.save();
+	await user2.save();
+	await project1.save();
+	await ticket1.save();
+	await ticket2.save();
+
 })
 
 describe('ticket services tests', () => {
@@ -77,13 +76,13 @@ describe('ticket services tests', () => {
 	describe('test getticket functionallity', () => {
 
 		it("Should get a single ticket", async () => {
-			const ticket = await ticketServices.getTicket(1);
+			const ticket = await ticketServices.getTicket(ticket1._id);
 			expect(ticket.title).toBe('Add filtering')
 		})
 
 		it("Should return false when ticket is not exists", async () => {
 			const ticket = await ticketServices.getTicket(282);
-			expect(ticket).toBe(false)
+			expect(ticket).toBe(undefined)
 		})
 	})
 
@@ -94,8 +93,9 @@ describe('ticket services tests', () => {
 			status: 'in progress',
 			type:'feature request',
 			piorty: 'medium',
-			developer:1,
-			submitter:2
+			developer:user2._id,
+			submitter:"Momen",
+			project:project1._id
 		}
 		const ticket = await ticketServices.store(data)
 		expect(ticket.title).toBe(data.title)
@@ -105,15 +105,14 @@ describe('ticket services tests', () => {
 
 		it("Should update a ticket details",async () => {
 			const data = {title: "syntax error"}
-			const ticket = await ticketServices.update(1,data)
+			const ticket = await ticketServices.update(ticket1._id,data)
 			expect(ticket.title).toBe(data.title)
 		})
 
-		it("Should return false when updateing unexiting ticket",async () => {
+		it("Should return false or undefined when updateing unexiting ticket",async () => {
 			const data = {title:'syntax error'}
 			const ticket = await ticketServices.update(11,data)
-			expect(ticket).toBe(false)
-			expect(ticket.name).toBe(undefined)
+			expect(ticket).toBe(undefined)
 		})
 	})
 
@@ -121,13 +120,13 @@ describe('ticket services tests', () => {
 	describe("Test delete ticket functionallity",() => {
 
 		it("Should delete a ticket",async () => {
-			const ticket = await ticketServices.delete(1)
+			const ticket = await ticketServices.delete(ticket1._id)
 			expect(ticket).toBe(true)
 		})
 
-		it("Should return false when updateing unexiting ticket",async () => {
+		it("Should return false or undefined when updateing unexiting ticket",async () => {
 			const ticket = await ticketServices.delete(100)
-			expect(ticket).toBe(false)
+			expect(ticket).toBe(undefined)
 		})
 	})
 

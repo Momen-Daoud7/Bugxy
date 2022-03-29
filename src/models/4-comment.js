@@ -1,27 +1,23 @@
-const Sequelize = require('sequelize');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const database = require('../config/database');
-
-const User = require('./1-user');
-const Ticket = require('./3-ticket')
-
-const Comment = database.define('comments', {
-	id: {
-		type: Sequelize.INTEGER,
-		autoIncrement: true,
-		allowNull: false,
-		primaryKey: true,
+const CommentSchema = new Schema({
+	message:{
+		type:String,
+		required:[true,"Message is required."]
 	},
-	message: {
-		type: Sequelize.STRING,
-		allowNull: false,
+	user: {
+		type:Schema.Types.ObjectId,
+		ref:'user',
+		required:[true,"User is required."]
+	},
+	ticket: {
+		type:Schema.Types.ObjectId,
+		ref:'ticket',
+		required:[true,"Ticket is required."]
 	}
 });
 
-User.hasMany(Comment);
-Ticket.hasMany(Comment);
-Comment.belongsTo(User);
-Comment.belongsTo(Ticket);
+const Comment = mongoose.model('comment',CommentSchema);
 
-
-module.exports = Comment; 
+module.exports = Comment;
